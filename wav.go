@@ -6,8 +6,19 @@ import (
 
 const PCM int = 1
 
+type Sample uint16
+
 type Audio struct {
+  Samples []Sample
   Data []byte
+}
+func (audio Audio) GenData() Audio {
+  audio.Data = make([]byte, len(audio.Samples)*2)
+  for i := 0; i < len(audio.Samples); i++ {
+    audio.Data[i*2] = byte(audio.Samples[i]>>8)
+    audio.Data[i*2 + 1] = byte(audio.Samples[i])
+  }
+  return audio
 }
 
 type RiffHeader struct {
